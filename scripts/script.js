@@ -1,8 +1,8 @@
-var Lab4 = (function () {
+class MasterMind {
 
-    const codeLength = 4;
-
-    const codePegs = [
+    static codeLength = 4;
+    
+    static codePegs =  [
         { name: "Green", color: "\u{1F7E2}" },
         { name: "Blue", color: "\u{1F535}" },
         { name: "Red", color: "\u{1F534}" },
@@ -11,52 +11,55 @@ var Lab4 = (function () {
         { name: "Orange", color: "\u{1F7E0}" }
     ];
 
-    const keyPegBlack = { name: "Black", color: "\u{26AB}" };
-    const keyPegWhite = { name: "White", color: "\u{26AA}" };
+    static keyPegBlack = { name: "Black", color: "\u{26AB}" };
+    static keyPegWhite = { name: "White", color: "\u{26AA}" };
 
-    return {
+    constructor(name) {
+        this.name = name
+        this.buildPegSelectors()
+    }
 
-        test: function () {
+    buildPegSelectors () {
+        for (let i = 0; i < MasterMind.codeLength; ++i) {
 
-            var p = document.createElement("p");
-            $(p).text("jQuery Version: " + $().jquery);
-            $("#output").append(p);
+            var pegSelectColumn = document.createElement("td");
 
-        },
+            var pegSelect = document.createElement("select");
+            $(pegSelect).attr("id", "slot" + i);
 
-        buildPegSelectors: function () {
+            $(pegSelect).append($("<option>", {
+                value: -1,
+                selected: "selected",
+                text: "(select a color)"
+            }));
 
-            for (let i = 0; i < codeLength; ++i) {
+            for (var p in MasterMind.codePegs) {
 
-                var pegSelectColumn = document.createElement("td");
-
-                var pegSelect = document.createElement("select");
-                $(pegSelect).attr("id", "slot" + i);
+                var peg = MasterMind.codePegs[p];
 
                 $(pegSelect).append($("<option>", {
-                    value: -1,
-                    selected: "selected",
-                    text: "(select a color)"
+                    value: p,
+                    text: peg["color"] + " (" + peg["name"] + ")"
                 }));
-
-                for (var p in codePegs) {
-
-                    var peg = codePegs[p];
-
-                    $(pegSelect).append($("<option>", {
-                        value: p,
-                        text: peg["color"] + " (" + peg["name"] + ")"
-                    }));
-
-                }
-
-                $(pegSelectColumn).append(pegSelect);
-                $("#pegslots").append(pegSelectColumn);
 
             }
 
+            $(pegSelectColumn).append(pegSelect);
+            $("#pegslots").append(pegSelectColumn);
+
         }
 
-    };
+    }
 
-})();
+    test() {
+        var p = document.createElement("p");
+        $(p).text("jQuery Version: " + $().jquery);
+        $("#output").append(p);
+    }
+}
+
+$(document).ready(function() {
+    let myGame = new MasterMind("name")
+    const btn = $("#submit_button")
+    btn.on("click", () => myGame.test());
+});
