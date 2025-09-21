@@ -56,6 +56,7 @@ class MasterMind {
             return;
         }
         this.set_guesses();
+        console.log(this.guesses)
         this.guess_count++;
         if (this.guess_count == 1){
             this.create_result_table_headers();
@@ -87,9 +88,9 @@ class MasterMind {
     }
 
     get_color(peg_name) {
-        for (let i = 0; i < length(MasterMind.codePegs), i++;){
+        for (let i = 0; i < ((MasterMind.codePegs).length); i++){
             let peg = MasterMind.codePegs[i];
-            if (peg_name in peg) {
+            if (peg_name == peg["name"]) {
                 return peg["color"];
             }
         }
@@ -99,14 +100,13 @@ class MasterMind {
     set_slots() {
         for (let i = 0; i < MasterMind.codeLength; i++) {
             let current_slot = $("#slot" + i);
-            console.log(current_slot);
             this.slots.push(current_slot);
         }
     }
 
     set_guesses() {
         this.slots.forEach((slot, i) => {
-            this.guesses["slot" + i] = slot.val();
+            this.guesses["slot" + i] = {name: slot.val(), color: this.get_color(slot.val())};
         });
 
     }
