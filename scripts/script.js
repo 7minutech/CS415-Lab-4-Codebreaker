@@ -86,6 +86,16 @@ class MasterMind {
         $("#seperator").after(row);
     }
 
+    get_color(peg_name) {
+        for (let i = 0; i < length(MasterMind.codePegs), i++;){
+            let peg = MasterMind.codePegs[i];
+            if (peg_name in peg) {
+                return peg["color"];
+            }
+        }
+        throw new Error("Peg name was not found in MasterMind.codePegs");
+    }
+
     set_slots() {
         for (let i = 0; i < MasterMind.codeLength; i++) {
             let current_slot = $("#slot" + i);
