@@ -60,6 +60,7 @@ class MasterMind {
         if (this.guess_count == 1){
             this.create_result_table_headers();
         }
+        this.create_result_table_row();
         var p = document.createElement("p");
         $(p).text("jQuery Version: " + $().jquery);
         $("#output").append(p);
@@ -72,10 +73,17 @@ class MasterMind {
         first_row.append($("<th>", {colspan: 4, rowspan: 2, text: "Key Pegs"}));
         $("#result_table").append(first_row)
         let second_row = $(document.createElement("tr"));
+        second_row.attr({id: "seperator"});
         for (let i = 1; i < MasterMind.codeLength + 1; i++){
             second_row.append($("<th>", {text: i}));
         }
-        $("#result_table").append(second_row)
+        $("#result_table").append(second_row);
+    }
+
+    create_result_table_row() {
+        let row = $(document.createElement("tr"));
+        row.append($("<td>", {text: this.guess_count, colspan: 2}));
+        $("#seperator").after(row);
     }
 
     set_slots() {
