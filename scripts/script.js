@@ -17,6 +17,7 @@ class MasterMind {
     constructor(name) {
         this.name = name
         this.buildPegSelectors()
+        this.guess_count = 0
     }
 
     buildPegSelectors () {
@@ -33,17 +34,13 @@ class MasterMind {
                 text: "(select a color)"
             }));
 
-            for (var p in MasterMind.codePegs) {
-
-                var peg = MasterMind.codePegs[p];
-
+            MasterMind.codePegs.forEach((peg) => {
                 $(pegSelect).append($("<option>", {
-                    value: p,
+                    value: peg,
                     text: peg["color"] + " (" + peg["name"] + ")"
                 }));
-
-            }
-
+            });
+            
             $(pegSelectColumn).append(pegSelect);
             $("#pegslots").append(pegSelectColumn);
 
@@ -51,7 +48,7 @@ class MasterMind {
 
     }
 
-    test() {
+    submit_guess() {
         var p = document.createElement("p");
         $(p).text("jQuery Version: " + $().jquery);
         $("#output").append(p);
@@ -61,5 +58,5 @@ class MasterMind {
 $(document).ready(function() {
     let myGame = new MasterMind("name")
     const btn = $("#submit_button")
-    btn.on("click", () => myGame.test());
+    btn.on("click", () => myGame.submit_guess());
 });
