@@ -11,6 +11,15 @@ class MasterMind {
         { name: "Orange", color: "\u{1F7E0}" }
     ];
 
+    static codePegNames = [
+        "Green",
+        "Blue",
+        "Red",
+        "Yellow",
+        "Brown",
+        "Orange"
+    ];
+
     static keyPegBlack = { name: "Black", color: "\u{26AB}" };
     static keyPegWhite = { name: "White", color: "\u{26AA}" };
 
@@ -19,6 +28,11 @@ class MasterMind {
         this.slots = [];
         this.set_slots();
         this.guess_count = 0;
+        this.white_pegs = 0;
+        this.black_pegs = 0;
+        this.code = [];
+        this.generate_code();
+        console.log(this.code)
         this.guesses = {slot0: null, slot1: null, slot2: null, slot3: null};
     }
 
@@ -61,6 +75,13 @@ class MasterMind {
             this.create_result_table_headers();
         }
         this.create_result_table_row();
+    }
+
+    generate_code() {
+        for (let i = 0; i < MasterMind.codeLength; i++){
+            let random_index = [(Math.floor(Math.random() * MasterMind.codePegNames.length))];
+            this.code.push(MasterMind.codePegNames[random_index]);
+        }
     }
 
     create_result_table_headers () {
