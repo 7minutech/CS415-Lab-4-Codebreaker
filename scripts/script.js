@@ -31,8 +31,11 @@ class MasterMind {
         this.white_pegs = 0;
         this.black_pegs = 0;
         this.code = [];
+        this.code_counts = {}
         this.generate_code();
+        this.generate_code_counts();
         console.log(this.code)
+        console.log(this.code_counts)
         this.guesses = {slot0: null, slot1: null, slot2: null, slot3: null};
     }
 
@@ -69,8 +72,10 @@ class MasterMind {
             alert("Must select a color for each slot");
             return;
         }
+        this.reset_white_black_pegs();
         this.set_guesses();
         this.guess_count++;
+        this.count_white_black_pegs();
         if (this.guess_count == 1){
             this.create_result_table_headers();
         }
@@ -82,6 +87,16 @@ class MasterMind {
             let random_index = [(Math.floor(Math.random() * MasterMind.codePegNames.length))];
             this.code.push(MasterMind.codePegNames[random_index]);
         }
+        this.code = ["Blue", "Yellow", "Red", "Green"]
+    }
+
+    generate_code_counts() {
+        this.code.forEach((color) => {
+            if (!(color in this.code_counts)){
+                this.code_counts[color] = 0;
+            }
+            this.code_counts[color]++;
+        });
     }
 
     create_result_table_headers () {
@@ -101,10 +116,16 @@ class MasterMind {
     create_result_table_row() {
         let row = $(document.createElement("tr"));
         row.append($("<td>", {text: this.guess_count, colspan: 2}));
-        $("#seperator").after(row);
         for (let guess in this.guesses){
             row.append($("<td>", {text: this.guesses[guess]["color"]}));
         }
+        for (let i = 0; i < this.black_pegs; i++){
+            row.append($("<td>", {text: "\u{26AB}", colspan: 1}));
+        }
+        for (let i = 0; i < this.white_pegs; i++){
+            row.append($("<td>", {text: "\u{26AA}", colspan: 1}));
+        }
+        $("#seperator").after(row);
     }
 
     get_color(peg_name) {
@@ -133,6 +154,26 @@ class MasterMind {
 
     valid_guesses() {
         return this.slots.every(slot => slot.val() != "-1");
+    }
+
+    count_white_black_pegs() {
+        let tmp_code_counts = { ...this.code_counts };
+        Object.keys(this.guesses).forEach((key, index) => {
+            let guess_color = this.guesses[key]["name"];
+            if (guess_color == this.code[index]){
+                this.black_pegs++;
+                tmp_code_counts[guess_color]--;
+            }
+            else if (this.code.includes(guess_color) && tmp_code_counts[guess_color] > 0) {
+                this.white_pegs++;
+                tmp_code_counts[guess_color]--;
+            }
+        })
+    }
+
+    reset_white_black_pegs() {
+        this.white_pegs = 0;
+        this.black_pegs = 0;
     }
 }
 
