@@ -15,8 +15,11 @@ class MasterMind {
     static keyPegWhite = { name: "White", color: "\u{26AA}" };
 
     constructor() {
-        this.buildPegSelectors()
-        this.guess_count = 0
+        this.buildPegSelectors();
+        this.slots = [];
+        this.set_slots();
+        this.guess_count = 0;
+        this.guesses = {slot0: null, slot1: null, slot2: null, slot3: null};
     }
 
     buildPegSelectors () {
@@ -35,7 +38,7 @@ class MasterMind {
 
             MasterMind.codePegs.forEach((peg) => {
                 $(pegSelect).append($("<option>", {
-                    value: peg,
+                    value: peg["name"],
                     text: peg["color"] + " (" + peg["name"] + ")"
                 }));
             });
@@ -52,21 +55,30 @@ class MasterMind {
             alert("Must select a color for each slot");
             return;
         }
+        this.set_guesses();
         this.guess_count++;
         var p = document.createElement("p");
         $(p).text("jQuery Version: " + $().jquery);
         $("#output").append(p);
     }
 
-    valid_guesses() {
+    set_slots() {
         for (let i = 0; i < MasterMind.codeLength; i++) {
             let current_slot = $("#slot" + i);
-
-            if (current_slot.val() == "-1") {
-                return false;
-            }
+            console.log(current_slot);
+            this.slots.push(current_slot);
         }
-        return true;
+    }
+
+    set_guesses() {
+        this.slots.forEach((slot, i) => {
+            this.guesses["slot" + i] = slot.val();
+        });
+
+    }
+
+    valid_guesses() {
+        return this.slots.every(slot => slot.val() != "-1");
     }
 }
 
