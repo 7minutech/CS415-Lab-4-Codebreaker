@@ -56,15 +56,11 @@ class MasterMind {
             return;
         }
         this.set_guesses();
-        console.log(this.guesses)
         this.guess_count++;
         if (this.guess_count == 1){
             this.create_result_table_headers();
         }
         this.create_result_table_row();
-        var p = document.createElement("p");
-        $(p).text("jQuery Version: " + $().jquery);
-        $("#output").append(p);
     }
 
     create_result_table_headers () {
@@ -85,6 +81,9 @@ class MasterMind {
         let row = $(document.createElement("tr"));
         row.append($("<td>", {text: this.guess_count, colspan: 2}));
         $("#seperator").after(row);
+        for (let guess in this.guesses){
+            row.append($("<td>", {text: this.guesses[guess]["color"]}));
+        }
     }
 
     get_color(peg_name) {
