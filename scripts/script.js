@@ -57,9 +57,25 @@ class MasterMind {
         }
         this.set_guesses();
         this.guess_count++;
+        if (this.guess_count == 1){
+            this.create_result_table_headers();
+        }
         var p = document.createElement("p");
         $(p).text("jQuery Version: " + $().jquery);
         $("#output").append(p);
+    }
+
+    create_result_table_headers () {
+        let first_row = $(document.createElement("tr"));
+        first_row.append($("<th>", {colspan: 2, rowspan: 2, text: "Row #"}));
+        first_row.append($("<th>", {colspan: 4, text: "Code Pegs"}));
+        first_row.append($("<th>", {colspan: 4, rowspan: 2, text: "Key Pegs"}));
+        $("#result_table").append(first_row)
+        let second_row = $(document.createElement("tr"));
+        for (let i = 1; i < MasterMind.codeLength + 1; i++){
+            second_row.append($("<th>", {text: i}));
+        }
+        $("#result_table").append(second_row)
     }
 
     set_slots() {
