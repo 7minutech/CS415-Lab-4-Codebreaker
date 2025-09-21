@@ -34,8 +34,7 @@ class MasterMind {
         this.code_counts = {}
         this.generate_code();
         this.generate_code_counts();
-        console.log(this.code)
-        console.log(this.code_counts)
+        this.game_over = false;
         this.guesses = {slot0: null, slot1: null, slot2: null, slot3: null};
     }
 
@@ -76,10 +75,17 @@ class MasterMind {
         this.set_guesses();
         this.guess_count++;
         this.count_white_black_pegs();
+        if (this.black_pegs == MasterMind.codeLength) {
+            this.game_over = true;
+        }
         if (this.guess_count == 1){
             this.create_result_table_headers();
         }
         this.create_result_table_row();
+        if (this.game_over) {
+            $("#submit_button").prop({disabled: true});
+            $("#output").append($("<p>", {text: "To play again refresh the page"}));
+        }
     }
 
     generate_code() {
@@ -87,7 +93,6 @@ class MasterMind {
             let random_index = [(Math.floor(Math.random() * MasterMind.codePegNames.length))];
             this.code.push(MasterMind.codePegNames[random_index]);
         }
-        this.code = ["Blue", "Yellow", "Red", "Green"]
     }
 
     generate_code_counts() {
@@ -124,6 +129,9 @@ class MasterMind {
         }
         for (let i = 0; i < this.white_pegs; i++){
             row.append($("<td>", {text: "\u{26AA}", colspan: 1}));
+        }
+        if (this.game_over){
+            row.append($("<p>", {text: `You won in ${this.guess_count} guess(es)!`}));
         }
         $("#seperator").after(row);
     }
